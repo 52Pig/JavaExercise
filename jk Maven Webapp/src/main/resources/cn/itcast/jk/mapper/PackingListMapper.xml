@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.itcast.jk.mapper.PackingListMapper">
+	<resultMap type="cn.itcast.jk.domain.PackingList" id="packingListRM">
+		<id column="PACKING_LIST_ID" property="id"/>
+		<result column="SELLER" property="seller"/>
+		<result column="BUYER" property="buyer"/>
+		<result column="INVOICE_NO" property="invoiceNo"/>
+		<result column="INVOICE_DATE" property="invoiceDate"/>
+		<result column="MARKS" property="marks"/>
+		<result column="DESCRIPTIONS" property="descriptions"/>
+		
+		<result column="EXPORT_IDS" property="exportIds"/>
+		<result column="EXPORT_NOS" property="exportNos"/>
+		
+		<result column="CREATE_BY" property="createBy"/>
+		<result column="CREATE_DEPT" property="createDept"/>
+		<result column="CREATE_TIME" property="createTime"/>		
+	</resultMap>
+	
+	<select id="find" parameterType="map" resultMap="packingListRM">
+		select * from PACKING_LIST_C
+		where 1=1
+	</select>
+	
+	<select id="get" parameterType="string" resultMap="packingListRM">
+		select * from PACKING_LIST_C
+		where PACKING_LIST_ID=#{xid}
+	</select>
+	
+	<insert id="insert" parameterType="cn.itcast.jk.domain.PackingList">
+		insert into 	PACKING_LIST_C
+		(PACKING_LIST_ID,SELLER,BUYER,INVOICE_NO,INVOICE_DATE,MARKS,DESCRIPTIONS,EXPORT_IDS,EXPORT_NOS,CREATE_BY,CREATE_DEPT,CREATE_TIME)
+		values
+		(
+			#{id},
+			#{seller},
+			#{buyer},
+			#{invoiceNo},
+			#{invoiceDate},
+			#{marks},
+			#{descriptions},
+			#{exportIds},
+			#{exportNos},
+			#{createBy},
+			#{createDept},
+			#{createTime}
+		)
+	</insert>
+	
+	<update id="update" parameterType="cn.itcast.jk.domain.PackingList">
+		update PACKING_LIST_C
+		<set>
+			<if test="seller !=null">SELLER=#{seller},</if>
+			<if test="buyer !=null">BUYER=#{buyer},</if>
+			<if test="invoiceNo !=null">INVOICE_NO=#{invoiceNo},</if>
+			<if test="invoiceDate !=null">INVOICE_DATE=#{invoiceDate},</if>
+			<if test="marks !=null">MARKS=#{marks},</if>
+			<if test="descriptions !=null">DESCRIPTIONS=#{descriptions},</if>
+			<if test="exportIds !=null">EXPORT_IDS=#{exportIds},</if>
+			<if test="exportNos !=null">EXPORT_NOS=#{exportNos},</if>
+		</set>
+		where PACKING_LIST_ID=#{id}
+	</update>
+	
+	<delete id="delete" parameterType="string">
+		delete from PACKING_LIST_C
+		where PACKING_LIST_ID in 
+		(
+			<foreach collection="array" item="id" separator=",">
+				#{id}
+			</foreach>
+		)
+	</delete>
+</mapper>

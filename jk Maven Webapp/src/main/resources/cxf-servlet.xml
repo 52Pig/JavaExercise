@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+		xmlns:jaxws="http://cxf.apache.org/jaxws" 
+		xsi:schemaLocation=" http://www.springframework.org/schema/beans 
+							http://www.springframework.org/schema/beans/spring-beans.xsd 
+							http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+    <import resource="classpath:META-INF/cxf/cxf.xml"/>
+    <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
+    
+    <!-- 将cxf和spring进行整合 -->
+    <!-- 声明服务 -->
+    <bean id="exportService" class="cn.itcast.jk.service.impl.ExportServiceImpl">
+    	<!-- 注入spring容器中dao -->
+    	<property name="exportDao" ref="exportDaoImpl"/>
+    </bean>
+    
+    <!-- 发布服务  implementor实现类，address发布访问地址-->
+    <jaxws:endpoint implementor="#exportService" address="/ExportServiceImpl"/>
+    
+</beans>

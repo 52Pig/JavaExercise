@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+	<!-- 配置属性文件，这样有变更只需改配置文件 -->
+	<properties resource="generatorConfig.properties"/>
+	<!-- 制定mysql的驱动包的路径 千万别放中文路径下 -->
+	<!--classPathEntry location="D:\javaenv\all_jar\database\mysql-connector-java-5.1.26.jar" /-->
+	<classPathEntry location="D:\javaenv\all_jar\database\oracle\ojdbc14.jar" />
+	<!-- 配置数据源和生成的代码所存放的位置 -->
+	<context id="itcast">
+		<!-- 是否生成注释 true不生成 false生成 -->
+		<commentGenerator>
+			<property name="suppressAllComments" value="${suppressAllComments}"/>
+		</commentGenerator>
+		<jdbcConnection driverClass="${driverClass}" connectionURL="${url}" userId="${username}" password="${password}" />
+		<!-- 所生成的实体类的位置默认资源包src -->
+		<javaModelGenerator targetPackage="${modeltargetPackage}" targetProject="${targetProject}" />
+		<!-- 所生成的sqlMap的影射文件的位置,默认资源包src -->
+		<sqlMapGenerator targetPackage="${sqltargetPackage}" targetProject="${targetProject}" />	
+		<javaClientGenerator targetPackage="${clienttargetPackage}" targetProject="${targetProject}" type="XMLMAPPER" /> 
+
+		<!-- 为哪些表生成代码 tableName:表名 schema:不用填写 -->
+		<table schema="" tableName="sys_code_b" />
+	</context>
+</generatorConfiguration>

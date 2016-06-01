@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.itcast.jk.mapper.ExportMapper">
+	<resultMap type="cn.itcast.jk.domain.Export" id="exportRM">
+		<id property="id" column="EXPORT_ID"/>
+		
+		<result property="pnum" column="PNUM"/>
+		<result property="extnum" column="EXTNUM"/>
+		
+		<result property="contractIds" column="CONTRACT_IDS"/>
+		<result property="customerContract" column="CUSTOMER_CONTRACT"/>
+		
+		<result property="inputDate" column="INPUT_DATE"/>
+		<result property="lcno" column="LCNO"/>
+		<result property="shipmentPort" column="SHIPMENT_PORT"/>
+		<result property="consignee" column="CONSIGNEE"/>
+		<result property="transportMode" column="TRANSPORT_MODE"/>
+		<result property="priceCondition" column="PRICE_CONDITION"/>
+		<result property="marks" column="MARKS"/>
+		<result property="remark" column="REMARK"/>
+		<result property="state" column="STATE"/>
+	</resultMap>
+	
+	<select id="find" parameterType="map" resultMap="exportRM">
+SELECT 
+(
+	SELECT COUNT(*) FROM export_product_c WHERE export_id=c.export_id
+)
+pnum,
+(
+	SELECT COUNT(*) FROM ext_eproduct_c WHERE export_product_id IN
+		(
+			SELECT export_product_id FROM export_product_c
+			WHERE export_id=c.export_id
+		)
+)
+extnum,
+c.*
+ FROM export_c c
+	</select>
+	
+	<select id="get" parameterType="string" resultMap="exportRM">
+		select * from export_c
+		where export_id=#{id}
+	</select>
+	
+	<!-- 为客户提供web service查询 -->
+	<select id="wsview" parameterType="string" resultMap="exportRM">
+SELECT * FROM export_c
+WHERE customer_contract LIKE #{contractNo}
+limit 1
+	</select>
+	
+	<insert id="insert" parameterType="cn.itcast.jk.domain.Export">
+		insert into export_c
+		(
+			EXPORT_ID,CONTRACT_IDS,CUSTOMER_CONTRACT,LCNO,SHIPMENT_PORT,CONSIGNEE,TRANSPORT_MODE,PRICE_CONDITION,MARKS,REMARK,INPUT_DATE,STATE
+		)
+		values
+		(
+			#{id,jdbcType=VARCHAR},
+			#{contractIds,jdbcType=VARCHAR},
+			#{customerContract,jdbcType=VARCHAR},
+			#{lcno,jdbcType=VARCHAR},
+			#{shipmentPort,jdbcType=VARCHAR},
+			#{consignee,jdbcType=VARCHAR},
+			#{transportMode,jdbcType=VARCHAR},
+			#{priceCondition,jdbcType=VARCHAR},
+			#{marks,jdbcType=VARCHAR},
+			#{remark,jdbcType=VARCHAR},
+			#{inputDate,jdbcType=TIMESTAMP},
+			#{state,jdbcType=INTEGER}
+		)
+	</insert>
+	
+	<update id="update" parameterType="cn.itcast.jk.domain.Export">
+		update export_c
+		<set>
+			<if test="customerContract">CUSTOMER_CONTRACT=#{customerContract},</if>
+			<if test="inputDate">INPUT_DATE=#{inputDate},</if>
+			<if test="lcno">LCNO=#{lcno},</if>
+			<if test="shipmentPort!=null">SHIPMENT_PORT=#{shipmentPort},</if>
+			<if test="consignee!=null">CONSIGNEE=#{consignee},</if>
+			<if test="transportMode!=null">TRANSPORT_MODE=#{transportMode},</if>
+			<if test="priceCondition!=null">PRICE_CONDITION=#{priceCondition},</if>
+			<if test="marks!=null">MARKS=#{marks},</if>
+			<if test="remark">REMARK=#{remark},</if>
+			<if test="state">STATE=#{state},</if>
+		</set>
+		where EXPORT_ID=#{id}
+	</update>	
+	
+	<update id="updateState">
+		update export_c set state=#{state} where export_id in
+		<foreach collection="ids" item="id" separator="," open="(" close=")">
+			#{id}
+		</foreach>		
+	</update>
+	
+	<delete id="delete">
+		delete from export_c
+		where export_id in
+		(
+			<foreach collection="array" item="id" separator=",">
+				#{id}
+			</foreach>		
+		)
+	</delete>
+	
+</mapper>
