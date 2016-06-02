@@ -1,0 +1,90 @@
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=gb2312">
+<TITLE>简易计算器</TITLE>
+<STYLE type="text/css">
+body{background-color:#99CCFF;}
+table{border-left:1 #FFFFFF solid;border-top:1 #FFFFFF solid;}
+.input1{BORDER-RIGHT: #FFFFFF 1px solid; BORDER-TOP: #000000 1px solid; BORDER-LEFT: #000000 1px solid;BORDER-BOTTOM: #FFFFFF 1px solid;width:180px;BACKGROUND-COLOR:#FFFFFF;text-align:right;}
+input{BORDER-RIGHT: #000000 1px solid; BORDER-TOP: #ffffff 1px solid; BORDER-LEFT: #ffffff 1px solid; COLOR: #000080; BORDER-BOTTOM: #000000 1px solid; BACKGROUND-COLOR: #d8d8d0;width:40px;height:20px;}
+TD{border-bottom:#FFFFFF 1 solid;border-right:#FFFFFF 1 solid;height:25px;}
+
+</STYLE>
+<SCRIPT language="javascript">
+var total=0;               //全局变量total,累计输入
+var FlagNew = false;  //是否是新的操作数（输入的第二个数）
+var Opp = "";      //运算符变量
+
+function clearall(){
+total=0;
+document.myform.number.value=0;//清除结果
+}
+
+function enternumber(Num){    //数字按钮单击调用的函数，Num表示输入的数字
+if (FlagNew) {             //判断输入的是否新的操作数
+document.myform.number.value = Num; 
+FlagNew = false; 
+} 
+else { 
+if (document.myform.number.value== "0") 
+document.myform.number.value= Num; 
+else 
+document.myform.number.value+= Num; //记录输入的操作 数
+} 
+}
+
+function Operation (Op) {              //“加减乘除”按钮单击调用的函数，Op代表运算符号
+var Num1=document.myform.number.value; 
+if (FlagNew && Opp != "=");{
+FlagNew = true; 
+ // 根据运算符进行运算
+if ( '+' == Opp) 
+total +=parseFloat(Num1); 
+else if ( '-' == Opp) 
+total -=parseFloat(Num1); 
+else if ( '/' == Opp) 
+total /=parseFloat(Num1); 
+else if ( '*' == Opp) 
+total *=parseFloat(Num1); 
+else 
+{total =parseFloat(Num1); }
+document.myform.number.value= total;   //结果文本框累计数字
+Opp = Op;
+} 
+}
+</SCRIPT> 
+</HEAD>
+
+<BODY>
+<TABLE width="180" border="0" cellspacing="0" cellpadding="3"align="center">
+   <FORM action="" method="post" name="myform">
+   <TR>
+    <TD colspan="4"><INPUT name="number" type="text" class="input1" value="0"></TD>
+  </TR>
+  <TR>
+    <TD><INPUT name="number7" type="button" value="7" onClick="enternumber(7)"></TD>
+	<TD><INPUT name="number8" type="button" value="8" onClick="enternumber(8)"></TD>
+	<TD><INPUT name="number9" type="button" value="9" onClick="enternumber(9)"></TD>
+	<TD><INPUT name="number+" type="button" value="+" onClick="Operation('+')"></TD>
+  </TR>
+  <TR>
+    <TD><INPUT name="number4" type="button" value="4" onClick="enternumber(4)"></TD>
+	<TD><INPUT name="number5" type="button" value="5" onClick="enternumber(5)"></TD>
+	<TD><INPUT name="number6" type="button" value="6" onClick="enternumber(6)"></TD>
+	<TD><INPUT name="number-" type="button" value="-" onClick="Operation('-')"></TD>
+  </TR>
+  <TR>
+    <TD><INPUT name="number1" type="button" value="1" onClick="enternumber(1)"></TD>
+	<TD><INPUT name="number2" type="button" value="2" onClick="enternumber(2)"></TD>
+	<TD><INPUT name="number3" type="button" value="3" onClick="enternumber(3)"></TD>
+	<TD><INPUT name="number*" type="button" value="*" onClick="Operation('*')"></TD>
+  </TR>
+  <TR>
+    <TD><INPUT name="number0" type="button" value="0" onClick="enternumber(0)"></TD>
+	<TD><INPUT name="numberC" type="button" value="C" onClick="clearall();"></TD>
+	<TD><INPUT name="number/" type="button" value="/" onClick="Operation('/')"></TD>
+	<TD><INPUT name="number=" type="button" value="=" onClick="Operation('=')"></TD>
+  </TR></FORM>
+</TABLE>
+</BODY>
+</HTML>
